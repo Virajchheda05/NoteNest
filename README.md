@@ -374,8 +374,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For support and questions:
 - Create an issue on GitHub
-- Email: support@notenest.app
-- Documentation: [docs.notenest.app](https://docs.notenest.app)
 
 ## Acknowledgments
 
