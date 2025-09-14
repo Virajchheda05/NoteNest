@@ -1,0 +1,79 @@
+/* src/App.css */
+
+/* ---------------------------------------------
+   Global Reset & Box Sizing
+   --------------------------------------------- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------------
+   Base HTML & Body Styles
+   --------------------------------------------- */
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ---------------------------------------------
+   Default Link Styling
+   --------------------------------------------- */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ---------------------------------------------
+   Utility Classes
+   --------------------------------------------- */
+/* Center content both vertically & horizontally */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hidden visually but still accessible to screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------------------------
+   Material-UI Overrides (if needed)
+   --------------------------------------------- */
+/* Example: globally adjust MUI button border radius */
+.MuiButton-root {
+  border-radius: 8px;
+}
+
+/* ---------------------------------------------
+   Media Queries (Global Tweaks)
+   --------------------------------------------- */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 12px;
+  }
+}
