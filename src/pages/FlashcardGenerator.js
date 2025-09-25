@@ -400,107 +400,244 @@ const FlashcardGenerator = () => {
   }
 
   const MyNotesTab = () => (
-    <>
-      <Typography variant="h4" sx={{ color: '#1B5E20', mb: 3, fontWeight: 'bold' }}>
-        Select Notes for AI Flashcard Generation
-      </Typography>
-      
-      {userNotes.length === 0 ? (
-        <Card sx={{ p: 4, textAlign: 'center' }}>
-          <Typography variant="h6" sx={{ color: '#666', mb: 2 }}>
-            No notes uploaded yet
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={() => navigate('/upload')}
-            sx={{ backgroundColor: '#2E7D32' }}
-          >
-            Upload Notes
-          </Button>
-        </Card>
-      ) : (
-        <Grid container spacing={3}>
-          {userNotes.map((note) => (
-            <Grid item xs={12} sm={6} md={4} key={note.id}>
-              <Card sx={{ 
-                height: 250,
-                display: 'flex',
-                flexDirection: 'column',
-                border: selectedNote?.id === note.id ? '2px solid #2E7D32' : '1px solid #e0e0e0',
-                '&:hover': { transform: 'translateY(-4px)' }
+  <>
+    <Typography variant="h4" sx={{ color: '#1B5E20', mb: 4, fontWeight: 'bold' }}>
+      Select Notes for AI Flashcard Generation
+    </Typography>
+    
+    {userNotes.length === 0 ? (
+      <Card sx={{ 
+        p: 6, 
+        textAlign: 'center',
+        background: 'linear-gradient(135deg, #f8fffe 0%, #f1f8e9 100%)',
+        border: '2px dashed #2E7D32',
+        borderRadius: 3
+      }}>
+        <Description sx={{ fontSize: 80, color: '#2E7D32', mb: 3, opacity: 0.7 }} />
+        <Typography variant="h5" sx={{ color: '#1B5E20', mb: 2, fontWeight: 'bold' }}>
+          No notes uploaded yet
+        </Typography>
+        <Typography variant="body1" sx={{ color: '#4A5C3A', mb: 3 }}>
+          Upload your first notes to start generating AI flashcards
+        </Typography>
+        <Button
+          variant="contained"
+          size="large"
+          onClick={() => navigate('/upload')}
+          sx={{ 
+            backgroundColor: '#2E7D32',
+            px: 4,
+            py: 1.5,
+            borderRadius: 2
+          }}
+        >
+          Upload Notes
+        </Button>
+      </Card>
+    ) : (
+      <Box sx={{
+        display: 'grid',
+        gridTemplateColumns: {
+          xs: 'repeat(2, 1fr)',
+          sm: 'repeat(3, 1fr)',
+          md: 'repeat(4, 1fr)',
+          lg: 'repeat(5, 1fr)',
+          xl: 'repeat(6, 1fr)'
+        },
+        gap: 2,
+        alignItems: 'start'
+      }}>
+        {userNotes.map((note) => (
+          <Card key={note.id} sx={{ 
+            height: 240, // Reduced height
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            border: selectedNote?.id === note.id ? '3px solid #2E7D32' : '1px solid #e0e0e0',
+            borderRadius: 3,
+            overflow: 'hidden',
+            transition: 'all 0.3s ease',
+            cursor: 'pointer',
+            '&:hover': { 
+              transform: 'translateY(-6px)',
+              boxShadow: '0 10px 25px rgba(46, 125, 50, 0.15)',
+              borderColor: selectedNote?.id === note.id ? '#2E7D32' : '#4CAF50'
+            }
+          }}>
+            {/* Header Section - Reduced Height */}
+            <Box sx={{ 
+              height: 60, // Reduced from 80px
+              background: selectedNote?.id === note.id 
+                ? 'linear-gradient(135deg, #C8E6C9 0%, #E8F5E8 100%)' 
+                : 'linear-gradient(135deg, #F1F8E9 0%, #E8F5E8 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderBottom: '1px solid rgba(46, 125, 50, 0.1)',
+              position: 'relative'
+            }}>
+              <Typography sx={{ 
+                opacity: selectedNote?.id === note.id ? 0.7 : 0.4, 
+                fontSize: '1.8rem', // Reduced font size
+                color: '#2E7D32'
               }}>
-                <Box sx={{ 
-                  height: 80,
-                  background: 'linear-gradient(135deg, #E8F5E8 0%, #F1F8E9 100%)',
+                {getFileIcon(note.files?.[0]?.fileType)}
+              </Typography>
+              
+              {/* Selection indicator */}
+              {selectedNote?.id === note.id && (
+                <Box sx={{
+                  position: 'absolute',
+                  top: 6,
+                  right: 6,
+                  backgroundColor: '#2E7D32',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: 20, // Smaller indicator
+                  height: 20,
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  fontSize: '0.7rem'
                 }}>
-                  <Typography sx={{ opacity: 0.3, fontSize: '2rem' }}>
-                    {getFileIcon(note.files?.[0]?.fileType)}
-                  </Typography>
+                  ✓
+                </Box>
+              )}
+            </Box>
+
+            {/* Content Section - More Compact */}
+            <CardContent sx={{ 
+              flexGrow: 1,
+              p: 2, // Reduced padding
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between'
+            }}>
+              <Box>
+                {/* Title - Smaller */}
+                <Typography variant="subtitle1" sx={{ // Changed from h6
+                  fontWeight: 'bold',
+                  color: selectedNote?.id === note.id ? '#1B5E20' : '#2E7D32',
+                  mb: 1,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  lineHeight: 1.2,
+                  minHeight: '2.4em',
+                  fontSize: '0.95rem'
+                }}>
+                  {note.title}
+                </Typography>
+
+                {/* Subject Tag - Smaller */}
+                <Box sx={{ 
+                  display: 'flex', 
+                  gap: 0.5, 
+                  mb: 1,
+                  minHeight: '22px',
+                  alignItems: 'flex-start'
+                }}>
+                  <Chip 
+                    label={note.subject || 'General'} 
+                    size="small" 
+                    sx={{ 
+                      backgroundColor: selectedNote?.id === note.id ? '#2E7D32' : '#E8F5E8',
+                      color: selectedNote?.id === note.id ? 'white' : '#1B5E20',
+                      fontSize: '0.65rem',
+                      fontWeight: 'bold',
+                      height: '20px'
+                    }} 
+                  />
+                  {note.files && note.files.length > 0 && (
+                    <Chip 
+                      label={`${note.files.length} file${note.files.length > 1 ? 's' : ''}`}
+                      size="small" 
+                      sx={{ 
+                        backgroundColor: '#E3F2FD',
+                        color: '#1976d2',
+                        fontSize: '0.65rem',
+                        height: '20px'
+                      }} 
+                    />
+                  )}
                 </Box>
 
-                <CardContent sx={{ flexGrow: 1, p: 2 }}>
-                  <Typography variant="h6" sx={{ 
-                    fontWeight: 'bold',
-                    color: '#1B5E20',
-                    mb: 1,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    display: '-webkit-box'
-                  }}>
-                    {note.title}
-                  </Typography>
+                {/* Description - Shorter */}
+                <Typography variant="body2" sx={{ 
+                  color: '#4A5C3A',
+                  mb: 1,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 1, // Reduced to 1 line
+                  WebkitBoxOrient: 'vertical',
+                  lineHeight: 1.3,
+                  minHeight: '1.3em',
+                  fontSize: '0.8rem'
+                }}>
+                  {note.description || 'No description available'}
+                </Typography>
+              </Box>
 
-                  <Box sx={{ display: 'flex', gap: 0.5, mb: 1 }}>
-                    <Chip label={note.subject} size="small" sx={{ 
-                      backgroundColor: '#E8F5E8', color: '#1B5E20', fontSize: '0.7rem' 
-                    }} />
-                  </Box>
+              {/* Metadata - Compact */}
+              <Box>
+                <Typography variant="caption" sx={{ 
+                  color: '#666',
+                  display: 'block',
+                  mb: 0.5,
+                  fontSize: '0.7rem'
+                }}>
+                  {note.createdAt?.toDate?.()?.toLocaleDateString() || 'Recent'}
+                  {note.averageRating > 0 && (
+                    <Box component="span" sx={{ ml: 1, color: '#FF9800', fontWeight: 'bold' }}>
+                      ★ {note.averageRating.toFixed(1)}
+                    </Box>
+                  )}
+                </Typography>
+              </Box>
+            </CardContent>
 
-                  <Typography variant="body2" sx={{ 
-                    color: '#4A5C3A',
-                    mb: 2,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    display: '-webkit-box'
-                  }}>
-                    {note.description || 'No description'}
-                  </Typography>
-                </CardContent>
-
-                <Box sx={{ p: 2, pt: 0 }}>
-                  <Button
-                    fullWidth
-                    variant={selectedNote?.id === note.id ? "contained" : "outlined"}
-                    onClick={() => {
-                      setSelectedNote(note);
-                      setCurrentTab(1);
-                      setGenerationStep(0);
-                      setExtractedText('');
-                      setGeneratedCards([]);
-                    }}
-                    sx={{
-                      color: selectedNote?.id === note.id ? 'white' : '#2E7D32',
-                      backgroundColor: selectedNote?.id === note.id ? '#2E7D32' : 'transparent',
-                      borderColor: '#2E7D32'
-                    }}
-                  >
-                    {selectedNote?.id === note.id ? 'Selected' : 'Select Note'}
-                  </Button>
-                </Box>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      )}
-    </>
-  );
+            {/* Action Section - Compact */}
+            <Box sx={{ 
+              p: 2, 
+              pt: 0
+            }}>
+              <Button
+                fullWidth
+                variant={selectedNote?.id === note.id ? "contained" : "outlined"}
+                size="small" // Made button smaller
+                onClick={() => {
+                  setSelectedNote(note);
+                  setCurrentTab(1);
+                  setGenerationStep(0);
+                  setExtractedText('');
+                  setGeneratedCards([]);
+                }}
+                sx={{
+                  color: selectedNote?.id === note.id ? 'white' : '#2E7D32',
+                  backgroundColor: selectedNote?.id === note.id ? '#2E7D32' : 'transparent',
+                  borderColor: '#2E7D32',
+                  fontWeight: 'bold',
+                  py: 0.5, // Reduced padding
+                  borderRadius: 1.5,
+                  fontSize: '0.8rem', // Smaller font
+                  '&:hover': {
+                    backgroundColor: selectedNote?.id === note.id ? '#1B5E20' : 'rgba(46, 125, 50, 0.04)',
+                    transform: 'translateY(-1px)'
+                  }
+                }}
+              >
+                {selectedNote?.id === note.id ? 'Selected ✓' : 'Select'}
+              </Button>
+            </Box>
+          </Card>
+        ))}
+      </Box>
+    )}
+  </>
+);
 
   const GenerateCardsTab = () => (
     <>
@@ -762,68 +899,121 @@ const FlashcardGenerator = () => {
   );
 
   const FlashcardSetsTab = () => (
-    <>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4" sx={{ color: '#1B5E20', fontWeight: 'bold' }}>
-          My Flashcard Sets ({flashcardSets.length})
+  <>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+      <Typography variant="h4" sx={{ color: '#1B5E20', fontWeight: 'bold' }}>
+        My Flashcard Sets ({flashcardSets.length})
+      </Typography>
+      <Button
+        variant="contained"
+        onClick={() => setCurrentTab(0)}
+        sx={{ 
+          backgroundColor: '#2E7D32',
+          px: 3,
+          py: 1,
+          borderRadius: 2
+        }}
+      >
+        Create New Set
+      </Button>
+    </Box>
+
+    {flashcardSets.length === 0 ? (
+      <Card sx={{ 
+        p: 6, 
+        textAlign: 'center',
+        background: 'linear-gradient(135deg, #f8fffe 0%, #f1f8e9 100%)',
+        border: '2px dashed #2E7D32',
+        borderRadius: 3
+      }}>
+        <Quiz sx={{ fontSize: 80, color: '#2E7D32', mb: 3, opacity: 0.7 }} />
+        <Typography variant="h5" sx={{ color: '#1B5E20', mb: 2, fontWeight: 'bold' }}>
+          No flashcard sets yet
+        </Typography>
+        <Typography variant="body1" sx={{ color: '#4A5C3A', mb: 3 }}>
+          Create your first AI-generated flashcard set from your notes
         </Typography>
         <Button
           variant="contained"
+          size="large"
           onClick={() => setCurrentTab(0)}
-          sx={{ backgroundColor: '#2E7D32' }}
+          sx={{ 
+            backgroundColor: '#2E7D32',
+            px: 4,
+            py: 1.5,
+            borderRadius: 2
+          }}
         >
-          Create New Set
+          Generate Your First Set
         </Button>
-      </Box>
+      </Card>
+    ) : (
+      <Box sx={{
+        display: 'grid',
+        gridTemplateColumns: {
+          xs: 'repeat(2, 1fr)',
+          sm: 'repeat(3, 1fr)',
+          md: 'repeat(4, 1fr)',
+          lg: 'repeat(5, 1fr)',
+          xl: 'repeat(6, 1fr)'
+        },
+        gap: 2,
+        alignItems: 'start'
+      }}>
+        {flashcardSets.map((set) => (
+          <Card key={set.id} sx={{ 
+            height: 250, // Reduced height
+            width: '100%', // Fixed width
+            display: 'flex',
+            flexDirection: 'column',
+            transition: 'all 0.3s ease',
+            borderRadius: 3,
+            overflow: 'hidden',
+            '&:hover': { 
+              transform: 'translateY(-8px)',
+              boxShadow: '0 12px 32px rgba(46, 125, 50, 0.15)'
+            }
+          }}>
+              {/* Header Section - Reduced Height */}
+              <Box sx={{ 
+                height: 70, // Reduced from 100px
+                background: 'linear-gradient(135deg, #E8F5E8 0%, #F1F8E9 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+                borderBottom: '1px solid rgba(46, 125, 50, 0.1)'
+              }}>
+                <Quiz sx={{ fontSize: 36, color: '#2E7D32', opacity: 0.4 }} /> {/* Smaller icon */}
+                
+                {/* Cards count badge */}
+                <Box sx={{
+                  position: 'absolute',
+                  top: 8,
+                  right: 8,
+                  backgroundColor: '#2E7D32',
+                  color: 'white',
+                  px: 1,
+                  py: 0.3,
+                  borderRadius: 1.5,
+                  fontSize: '0.7rem',
+                  fontWeight: 'bold'
+                }}>
+                  {set.totalCards} cards
+                </Box>
+              </Box>
 
-      {flashcardSets.length === 0 ? (
-        <Card sx={{ p: 4, textAlign: 'center' }}>
-          <Quiz sx={{ fontSize: 64, color: '#2E7D32', mb: 2 }} />
-          <Typography variant="h6" sx={{ color: '#666', mb: 2 }}>
-            No flashcard sets yet
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={() => setCurrentTab(0)}
-            sx={{ backgroundColor: '#2E7D32' }}
-          >
-            Generate Your First Set
-          </Button>
-        </Card>
-      ) : (
-        <Grid container spacing={3}>
-          {flashcardSets.map((set) => (
-            <Grid item xs={12} sm={6} md={4} key={set.id}>
-              <Card sx={{ 
-                height: 280, 
+              {/* Content Section - More Compact */}
+              <CardContent sx={{ 
+                flexGrow: 1,
+                p: 2, // Reduced padding
                 display: 'flex',
                 flexDirection: 'column',
-                '&:hover': { transform: 'translateY(-4px)' }
+                justifyContent: 'space-between'
               }}>
-                <Box sx={{ 
-                  height: 80,
-                  background: 'linear-gradient(135deg, #E8F5E8 0%, #F1F8E9 100%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'relative'
-                }}>
-                  <Quiz sx={{ fontSize: 40, color: '#2E7D32', opacity: 0.3 }} />
-                  <Chip
-                    label={`${set.totalCards} cards`}
-                    size="small"
-                    sx={{
-                      position: 'absolute',
-                      top: 8,
-                      right: 8,
-                      backgroundColor: '#2E7D32',
-                      color: 'white'
-                    }}
-                  />
-                </Box>
-
-                <CardContent sx={{ flexGrow: 1, p: 2 }}>
-                  <Typography variant="h6" sx={{ 
+                <Box>
+                  {/* Title - Smaller */}
+                  <Typography variant="subtitle1" sx={{ // Changed from h6
                     fontWeight: 'bold',
                     color: '#1B5E20',
                     mb: 1,
@@ -831,76 +1021,135 @@ const FlashcardGenerator = () => {
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
                     WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical'
+                    WebkitBoxOrient: 'vertical',
+                    lineHeight: 1.2,
+                    minHeight: '2.4em',
+                    fontSize: '0.95rem'
                   }}>
                     {set.name}
                   </Typography>
 
-                  <Box sx={{ display: 'flex', gap: 0.5, mb: 2, flexWrap: 'wrap' }}>
+                  {/* Tags - Smaller */}
+                  <Box sx={{ 
+                    display: 'flex', 
+                    gap: 0.5, 
+                    mb: 1, 
+                    flexWrap: 'wrap',
+                    minHeight: '20px'
+                  }}>
                     <Chip 
-                      label={set.subject} 
+                      label={set.subject || 'General'} 
                       size="small" 
-                      sx={{ backgroundColor: '#E8F5E8', color: '#1B5E20', fontSize: '0.7rem' }} 
+                      sx={{ 
+                        backgroundColor: '#E8F5E8', 
+                        color: '#1B5E20', 
+                        fontSize: '0.65rem',
+                        fontWeight: 'bold',
+                        height: '18px'
+                      }} 
                     />
                     <Chip 
-                      label={set.difficulty} 
+                      label={set.difficulty || 'medium'} 
                       size="small" 
-                      sx={{ backgroundColor: '#E3F2FD', color: '#1976d2', fontSize: '0.7rem' }} 
+                      sx={{ 
+                        backgroundColor: '#E3F2FD', 
+                        color: '#1976d2', 
+                        fontSize: '0.65rem',
+                        fontWeight: 'bold',
+                        height: '18px'
+                      }} 
                     />
                   </Box>
 
-                  {set.description && (
-                    <Typography variant="body2" sx={{ 
-                      color: '#4A5C3A',
-                      mb: 2,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical'
-                    }}>
-                      {set.description}
-                    </Typography>
-                  )}
-
-                  <Typography variant="caption" sx={{ color: '#666' }}>
-                    Created: {set.createdAt?.toLocaleDateString()}
-                    {set.studyCount > 0 && ` • Studied ${set.studyCount} times`}
+                  {/* Description - Shorter */}
+                  <Typography variant="body2" sx={{ 
+                    color: '#4A5C3A',
+                    mb: 1,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 1, // Reduced to 1 line
+                    WebkitBoxOrient: 'vertical',
+                    lineHeight: 1.3,
+                    minHeight: '1.3em',
+                    fontSize: '0.8rem'
+                  }}>
+                    {set.description || 'AI-generated flashcards for effective studying'}
                   </Typography>
-                </CardContent>
-
-                <Box sx={{ p: 2, pt: 0 }}>
-                  <Grid container spacing={1}>
-                    <Grid item xs={8}>
-                      <Button
-                        fullWidth
-                        variant="contained"
-                        size="small"
-                        startIcon={<PlayArrow />}
-                        onClick={() => startStudyMode(set)}
-                        sx={{ backgroundColor: '#2E7D32', fontSize: '0.75rem' }}
-                      >
-                        Study
-                      </Button>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <IconButton
-                        size="small"
-                        onClick={() => deleteFlashcardSet(set.id)}
-                        sx={{ color: '#f44336', width: '100%' }}
-                      >
-                        <Delete fontSize="small" />
-                      </IconButton>
-                    </Grid>
-                  </Grid>
                 </Box>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      )}
-    </>
-  );
+
+                {/* Meta info - Compact */}
+                <Box sx={{ mt: 'auto' }}>
+                  <Typography variant="caption" sx={{ 
+                    color: '#666',
+                    display: 'block',
+                    mb: 0.5,
+                    fontSize: '0.7rem'
+                  }}>
+                    {set.createdAt?.toLocaleDateString() || 'Recent'}
+                    {set.studyCount > 0 && (
+                      <Box component="span" sx={{ ml: 1, color: '#2E7D32', fontWeight: 'bold' }}>
+                        • {set.studyCount}x studied
+                      </Box>
+                    )}
+                  </Typography>
+                </Box>
+              </CardContent>
+
+              {/* Actions Section - Compact */}
+              <Box sx={{ 
+                p: 2, 
+                pt: 0
+              }}>
+                <Grid container spacing={1.5}>
+                  <Grid item xs={9}>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      size="medium"
+                      startIcon={<PlayArrow />}
+                      onClick={() => startStudyMode(set)}
+                      sx={{ 
+                        backgroundColor: '#2E7D32',
+                        fontSize: '0.875rem',
+                        fontWeight: 'bold',
+                        py: 1,
+                        borderRadius: 2,
+                        '&:hover': { 
+                          backgroundColor: '#1B5E20',
+                          transform: 'translateY(-1px)'
+                        }
+                      }}
+                    >
+                      Study Now
+                    </Button>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <IconButton
+                      onClick={() => deleteFlashcardSet(set.id)}
+                      sx={{ 
+                        color: '#f44336',
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: 2,
+                        border: '1px solid rgba(244, 67, 54, 0.2)',
+                        '&:hover': { 
+                          backgroundColor: 'rgba(244, 67, 54, 0.08)',
+                          transform: 'translateY(-1px)'
+                        }
+                      }}
+                    >
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Card>
+        ))}
+      </Box>
+    )}
+  </>
+);
 
   const StudyModeInterface = () => {
     if (!studySet || studySet.cards.length === 0) return null;
